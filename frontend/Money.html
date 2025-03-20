@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Money Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="money.js"></script>
+  </head>
+  <body class="bg-gray-100 pt-16">
+    <!-- Navbar -->
+    <nav class="bg-[#F3B0B0] text-white w-full fixed top-0 left-0 shadow-md z-50">
+      <div class="max-w-screen-xl mx-auto flex justify-between items-center px-6 py-4">
+        <!-- Logo / Website Name -->
+        <a href="Money.html" class="text-2xl font-bold">Neeny</a>
+        
+        <!-- Navigation Links -->
+        <ul class="flex space-x-8 text-lg">
+          <li><a href="Money.html" class="hover:underline">Money</a></li>
+          <li><a href="Home.html" class="hover:underline">Home</a></li>
+          <li><a href="register.html" class="hover:underline">Register</a></li>
+          <li><a href="login.html" class="hover:underline">Login</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-screen-md mx-auto p-6 bg-white rounded-lg shadow-md mt-24">
+      <!-- Total Amount -->
+      <h1 class="text-2xl font-bold text-center text-[#F3B0B0]" id="totalAmount">
+        Total Amount Saved: $0
+      </h1>
+
+      <!-- Contributions List -->
+      <h2 class="text-xl font-semibold mt-6">Contributions</h2>
+      <ul id="contributionsList" class="mt-4 space-y-4"></ul>
+
+      <!-- Add Contribution Button -->
+      <button
+        id="addContributionBtn"
+        class="mt-6 w-full bg-[#F3B0B0] text-white px-4 py-2 rounded hover:bg-pink-600 transition"
+      >
+        Add Contribution
+      </button>
+    </div>
+
+    <!-- Add Contribution Modal -->
+    <div id="addContributionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden justify-center items-center z-50">
+      <div class="bg-white p-6 rounded-lg max-w-md w-full">
+        <h2 class="text-2xl font-semibold mb-4 text-[#F3B0B0]">Add Contribution</h2>
+        
+        <form id="addContributionForm">
+          <div class="mb-4">
+            <label for="name" class="block text-sm font-medium">Name</label>
+            <input type="text" id="name" name="name" class="mt-2 p-2 w-full border rounded" required />
+          </div>
+          
+          <div class="mb-4">
+            <label for="amount" class="block text-sm font-medium">Amount</label>
+            <input type="number" id="amount" name="amount" class="mt-2 p-2 w-full border rounded" required />
+          </div>
+          
+          <div class="mb-4">
+            <label for="reason" class="block text-sm font-medium">Reason</label>
+            <input type="text" id="reason" name="reason" class="mt-2 p-2 w-full border rounded" />
+          </div>
+          
+          <div class="flex justify-between">
+            <button type="submit" class="bg-[#F3B0B0] text-white px-4 py-2 rounded hover:bg-pink-600">Add</button>
+            <button type="button" id="closeModalBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Load Navbar -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("component/navbar.html")
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("navbar-container").innerHTML = html;
+          })
+          .catch((error) => console.error("Error loading navbar:", error));
+
+        // Open the modal when the button is clicked
+        const addContributionBtn = document.getElementById("addContributionBtn");
+        const addContributionModal = document.getElementById("addContributionModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        addContributionBtn.addEventListener("click", () => {
+          addContributionModal.classList.remove("hidden");
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+          addContributionModal.classList.add("hidden");
+        });
+
+        // Handle form submission
+        const addContributionForm = document.getElementById("addContributionForm");
+        addContributionForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const amount = parseInt(document.getElementById("amount").value);
+          const reason = document.getElementById("reason").value;
+
+          // Add contribution to list (In a real app, you'd save it to a database)
+          addContribution(name, amount, reason);
+
+          // Close the modal after submission
+          addContributionModal.classList.add("hidden");
+
+          // Reset form
+          addContributionForm.reset();
+        });
+      });
+
+      // Function to add contribution to the list
+      function addContribution(name, amount, reason) {
+        const contributionsList = document.getElementById("contributionsList");
+        
+        const li = document.createElement("li");
+        const date = new Date().toLocaleDateString();
+        li.classList.add("p-4", "bg-gray-100", "rounded-md", "shadow-sm");
+
+        li.innerHTML = `
+          <strong>${name}</strong><br />
+          Amount: $${amount}<br />
+          Reason: ${reason ? reason : "N/A"}<br />
+          Date: ${date}
+        `;
+
+        contributionsList.appendChild(li);
+
+        // Update total amount saved
+        updateTotalAmount();
+      }
+
+      // Function to update total amount
+      function updateTotalAmount() {
+        const contributionsList = document.getElementById("contributionsList").children;
+        let totalAmount = 0;
+
+        for (let contribution of contributionsList) {
+          const amount = parseInt(contribution.querySelector("strong + br + span").textContent.replace('$', ''));
+          totalAmount += amount;
+        }
+
+        document.getElementById("totalAmount").textContent = `Total Amount Saved: $${totalAmount}`;
+      }
+    </script>
+  </body>
+</html>

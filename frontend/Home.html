@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 pt-16">
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Page Content -->
+    <div class="max-w-screen-xl mx-auto p-6">
+      <h1 class="text-3xl font-bold">Home</h1>
+      <p class="text-gray-700 mt-2">Welcome to the Home page!</p>
+
+      <!-- Welcome Message -->
+      <p id="welcomeMessage" class="mt-4 text-lg font-medium text-gray-800">
+        Welcome, [User Name]!
+      </p>
+
+      <!-- Logout Button -->
+      <button
+        id="logoutBtn"
+        class="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Logout
+      </button>
+    </div>
+
+    <!-- Load Navbar -->
+    <script defer>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("components/navbar.html") // Make sure this matches your actual folder structure
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("navbar-container").innerHTML = html;
+          })
+          .catch((error) => console.error("Error loading navbar:", error));
+      });
+
+      // Display the welcome message
+      document.addEventListener("DOMContentLoaded", function () {
+        const userName = localStorage.getItem("userName");
+        document.getElementById("welcomeMessage").textContent = userName
+          ? `Welcome, ${userName}!`
+          : "Welcome, Guest!";
+      });
+
+      // Handle Logout
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          localStorage.removeItem("userName");
+          window.location.href = "/";
+        });
+      });
+    </script>
+  </body>
+</html>

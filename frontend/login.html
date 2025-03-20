@@ -55,7 +55,7 @@
           console.log("Attempting login with:", { name, password });
 
           // Send a POST request to the backend for authentication
-          fetch("http://localhost:3000/login", {
+          fetch("http://localhost:3000/api/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -70,7 +70,7 @@
                 // Store user info in localStorage
                 console.log(`Login successful for user: ${name}`);
                 localStorage.setItem("userName", name);
-                window.location.href = "about.html"; // Redirect to About page
+                window.location.href = "Home.html"; // Redirect to About page
               } else {
                 console.log("Login failed: Invalid credentials");
                 alert("Invalid credentials");
