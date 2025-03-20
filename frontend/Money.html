@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Money Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="money.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <script defer src="script/money.js"></script>
   </head>
   <body class="bg-gray-100 pt-16">
     <!-- Navbar -->
@@ -72,83 +72,5 @@
         </form>
       </div>
     </div>
-
-    <!-- Load Navbar -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("component/navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-container").innerHTML = html;
-          })
-          .catch((error) => console.error("Error loading navbar:", error));
-
-        // Open the modal when the button is clicked
-        const addContributionBtn = document.getElementById("addContributionBtn");
-        const addContributionModal = document.getElementById("addContributionModal");
-        const closeModalBtn = document.getElementById("closeModalBtn");
-
-        addContributionBtn.addEventListener("click", () => {
-          addContributionModal.classList.remove("hidden");
-        });
-
-        closeModalBtn.addEventListener("click", () => {
-          addContributionModal.classList.add("hidden");
-        });
-
-        // Handle form submission
-        const addContributionForm = document.getElementById("addContributionForm");
-        addContributionForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const name = document.getElementById("name").value;
-          const amount = parseInt(document.getElementById("amount").value);
-          const reason = document.getElementById("reason").value;
-
-          // Add contribution to list (In a real app, you'd save it to a database)
-          addContribution(name, amount, reason);
-
-          // Close the modal after submission
-          addContributionModal.classList.add("hidden");
-
-          // Reset form
-          addContributionForm.reset();
-        });
-      });
-
-      // Function to add contribution to the list
-      function addContribution(name, amount, reason) {
-        const contributionsList = document.getElementById("contributionsList");
-        
-        const li = document.createElement("li");
-        const date = new Date().toLocaleDateString();
-        li.classList.add("p-4", "bg-gray-100", "rounded-md", "shadow-sm");
-
-        li.innerHTML = `
-          <strong>${name}</strong><br />
-          Amount: $${amount}<br />
-          Reason: ${reason ? reason : "N/A"}<br />
-          Date: ${date}
-        `;
-
-        contributionsList.appendChild(li);
-
-        // Update total amount saved
-        updateTotalAmount();
-      }
-
-      // Function to update total amount
-      function updateTotalAmount() {
-        const contributionsList = document.getElementById("contributionsList").children;
-        let totalAmount = 0;
-
-        for (let contribution of contributionsList) {
-          const amount = parseInt(contribution.querySelector("strong + br + span").textContent.replace('$', ''));
-          totalAmount += amount;
-        }
-
-        document.getElementById("totalAmount").textContent = `Total Amount Saved: $${totalAmount}`;
-      }
-    </script>
   </body>
 </html>

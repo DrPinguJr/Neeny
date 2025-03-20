@@ -19,29 +19,30 @@ router.get("/contributions", async (req, res) => {
   res.status(200).json(data);
 });
 
-// Add a new contribution
+// Add a new contribution (Backend)
 router.post("/contributions", async (req, res) => {
-  const { name, amount, reason } = req.body;
-
-  if (!name || !amount || isNaN(amount)) {
-    return res.status(400).json({ error: "Invalid input" });
-  }
-
-  const { data, error } = await supabase.from("money").insert([
-    {
-      name,
-      amount,
-      reason,
-      created_at: new Date(),
-    },
-  ]);
-
-  if (error) {
-    return res.status(500).json({ error: "Error adding contribution" });
-  }
-
-  res.status(201).json({ message: "Contribution added successfully", data });
-});
+    const { name, amount, reason } = req.body;
+  
+    if (!name || !amount || isNaN(amount)) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+  
+    const { data, error } = await supabase.from("money").insert([
+      {
+        name,
+        amount,
+        reason,
+        created_at: new Date(),
+      },
+    ]);
+  
+    if (error) {
+      return res.status(500).json({ error: "Error adding contribution" });
+    }
+  
+    res.status(201).json({ message: "Contribution added successfully", data });
+  });
+  
 
 // Register user route
 router.post("/register", async (req, res) => {
