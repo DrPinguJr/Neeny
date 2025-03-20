@@ -1,0 +1,17 @@
+# Dependency directories (if using npm or yarn)
+node_modules/
+
+# Build directory (if you're using a build tool like Webpack or Parcel)
+dist/
+build/
+
+# Environment files (in case there are any used by the frontend)
+.env
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+
+      <!-- Login Form -->
+      <form id="loginForm" method="POST" action="javascript:void(0)">
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+      <div class="signup-link">
+        <p>Don't have an account? <a href="register.html">Sign up</a></p>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const password = document.getElementById("password").value;
+
+          // Log the form inputs
+          console.log("Attempting login with:", { name, password });
+
+          // Send a POST request to the backend for authentication
+          fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Server response:", data); // Log the response from the server
+
+              if (data.success) {
+                // Store user info in localStorage
+                console.log(`Login successful for user: ${name}`);
+                localStorage.setItem("userName", name);
+                window.location.href = "about.html"; // Redirect to About page
+              } else {
+                console.log("Login failed: Invalid credentials");
+                alert("Invalid credentials");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error); // Log the error if the fetch fails
+              alert("Login failed");
+            });
+        });
+    </script>
+  </body>
+</html>
